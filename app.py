@@ -44,11 +44,10 @@ str_app.title("Makrogazdasági Elemzés: Az olajtól a bevásárlókosárig")
 str_app.markdown("*Hogyan gyűrűzik be a világpiaci válság a romániai mindennapokba (2021–2026)?*")
 str_app.markdown("---")
 
-# --- 1. SZEKCIÓ: DOKUMENTÁCIÓ (Újratervezve: Fülekkel és natív dobozokkal) ---
+# --- 1. SZEKCIÓ: DOKUMENTÁCIÓ ---
 str_app.markdown("<a id='projekt-dokumentacio'></a>", unsafe_allow_html=True)
-with str_app.expander("KATTINTS IDE: Projekt Dokumentáció & Elméleti Útmutató (Tanári kérdések)"):
+with str_app.expander("KATTINTS IDE: Projekt Dokumentáció & Elméleti Útmutató"):
     
-    # Itt hozzuk létre a modern, kattintható füleket
     tab1, tab2, tab3 = str_app.tabs(["Koncepció & Adatok", "Célközönség", "Skálázhatóság & Jövő"])
     
     with tab1:
@@ -115,4 +114,4 @@ with row3_col2:
     str_app.plotly_chart(charts['salary'], use_container_width=True)
 
 str_app.markdown("---")
-str_app.caption("Készítette: Makrogazdasági Elemző Projekt (Cursor & Python Streamlit) - 2026")
+str_app.caption("Készítette: Varga Norbert és Kovács Ákos, a Babeș-Bolyai Tudományegyetem hallgatói - 2026")
