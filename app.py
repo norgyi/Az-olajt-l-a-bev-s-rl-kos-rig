@@ -69,7 +69,7 @@ charts = create_charts(filtered_df)
 
 # --- FŐOLDAL FEJLÉC ---
 str_app.title("Makrogazdasági Elemzés: Az olajtól a bevásárlókosárig")
-str_app.markdown("*Hogyan gyűrűzik be a világpiaci válság a romániai mindennapokba (2021–2026)?*")
+str_app.markdown("*Hogyan gyűrűzik be a világpiaci válság a romániai mindennapokba?*")
 str_app.markdown("---")
 
 # --- 1. SZEKCIÓ: DOKUMENTÁCIÓ ---
