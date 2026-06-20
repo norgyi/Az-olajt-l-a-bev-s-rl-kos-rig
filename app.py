@@ -52,15 +52,15 @@ with str_app.expander("KATTINTS IDE: Projekt Dokumentáció & Elméleti Útmutat
     
     with tab1:
         str_app.info("**Miről szól a projekt?**\n\nEz az összefüggő portfólió azt mutatja be, hogyan gyűrűzik be a világpiaci nyersolaj (Brent) árváltozása és a valutaárfolyamok mozgása a romániai gazdaságba, közvetlenül befolyásolva a lakossági üzemanyagárakat, a nemzeti inflációt (CPI) és a lakosság valós vásárlóerejét.")
-        str_app.info("**Milyen adatokat használsz és miért érdekesek?**\n\nA modell valós piaci trendeken alapuló idősoros makrogazdasági adatokat használ. Az adatok azért érdekesek, mert számszerűsítik, hogy a globális geopolitikai sokkok hogyan válnak kézzelfogható drágulássá a romániai kutakon és a boltokban.")
+        str_app.info("**Milyen adatokat használsz és miért érdekesek?**\n\nA projekt **élő, API-alapú piaci adatokat** használ (a Yahoo Finance rendszeréből lekérve a Brent olaj és a devizaárfolyamok esetében), melyeket a hivatalos román statisztikai trendekkel (INSSE) kombinálunk a makrogazdasági mutatókhoz. Az adatok azért érdekesek, mert számszerűsítik, hogy a globális geopolitikai sokkok hogyan válnak azonnal kézzelfogható drágulássá a romániai kutakon és a boltokban.")
         
     with tab2:
         str_app.success("**Ki a cél-felhasználó és mit tanul ebből?**\n\nA cél-felhasználók gazdasági/marketing szakos egyetemi hallgatók, illetve pénzügyi elemzők. A felhasználó megérti a korrelációt a globális nyersanyagárak és a lokális infláció között.")
         
     with tab3:
         str_app.warning("**Mennyire skálázható a megoldás?**\n\nA megoldás rendkívül skálázható. A moduláris architektúra lehetővé teszi újabb országok vagy egyéb nyersanyagok (földgáz, áram) integrálását a struktúra átépítése nélkül.")
-        str_app.warning("**Mennyire automatizálható a megoldás?**\n\n100%-ban automatizálható. A statikus adathalmaz helyére beilleszthetőek élő API-lekérések (pl. Yahoo Finance, INSSE), így a dashboard mindig a legfrissebb adatokat mutatja.")
-        str_app.error("**Mivel lenne még hasznos bővíteni?**\n\nHasznos lenne kiegészíteni a fogyasztói kosár részletesebb bontásával, egy prediktív Machine Learning (ARIMA) modellel az üzemanyagárak előrejelzésére, valamint egy személyes infláció-kalkulátorral.")
+        str_app.warning("**Mennyire automatizálható a megoldás?**\n\nA megoldás már jelenleg is **magas fokon automatizált**. A tőzsdei adatok frissítése élő API-lekéréseken keresztül történik, így a dashboard minden megnyitáskor automatikusan a legfrissebb elérhető piaci adatokat húzza be. Az architektúra fel van készítve arra is, hogy a jövőben a statisztikai adatok (Eurostat) is közvetlen API-kapcsolaton keresztül frissüljenek.")
+        str_app.error("**Mivel lenne még hasznos bővíteni?**\n\nHasznos lenne kiegészíteni a fogyasztói kosár részletesebb bontásával (élelmiszerek és szolgáltatások egyedi inflációja), valamint egy prediktív gépi tanulási (Machine Learning - ARIMA) modellel, ami előrejelzi a következő hónapok várható üzemanyagárait.")
 
 str_app.markdown("<br>", unsafe_allow_html=True)
 
