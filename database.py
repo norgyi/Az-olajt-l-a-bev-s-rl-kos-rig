@@ -1,42 +1,41 @@
+import yfinance as yf
 import pandas as pd
 import numpy as np
 
 def get_dashboard_data():
-    # Idősor generálása 2021 és 2026 között
-    dates = pd.date_range(start="2021-01-01", end="2026-05-01", freq="ME")
-    n_months = len(dates)
+    tickers = ["BZ=F", "USDRON=X", "EURRON=X"]
     
-    # 1. Brent Olajár (USD)
-    brent_prices = [55.0 + (i * 1.2) if i < 15 else 95.0 - ((i-15) * 0.4) for i in range(n_months)]
-    brent_prices = [p + np.random.normal(0, 3) for p in brent_prices]
+    # Valós piaci adatok letöltése a Yahoo Finance-ről
+    raw_data = yf.download(tickers, start="2021-01-01")
     
-    # 2. USD/RON és EUR/RON árfolyamok
-    usd_ron = [4.1 + (i * 0.01) + np.random.normal(0, 0.05) for i in range(n_months)]
-    eur_ron = [4.9 + (i * 0.002) + np.random.normal(0, 0.01) for i in range(n_months)]
+    # Biztonságos oszlopkiválasztás (a yfinance gyakran MultiIndexet ad vissza)
+    if isinstance(raw_data.columns, pd.MultiIndex):
+        data = raw_data['Close'].copy()
+    else:
+        data = raw_data.copy()
+        
+    # Átnevezzük az oszlopokat a mi neveinkre
+    data = data.rename(columns={"BZ=F": "Brent_Olaj_USD", "USDRON=X": "USD_RON", "EURRON=X": "EUR_RON"})
     
-    # 3. Romániai üzemanyagárak (RON/liter)
-    benzin_prices = [4.8 + (p * 0.035) * (u / 4.2) for p, u in zip(brent_prices, usd_ron)]
-    motorina_prices = [p + 0.4 + np.random.normal(0, 0.1) for p in benzin_prices]
+    # Dátumok és hiányzó adatok kezelése (Modern Pandas 2.0+ szintaxis)
+    data = data.resample('ME').mean() 
+    data = data.bfill().ffill() # Először visszafelé, majd előrefelé tölti ki a lyukakat a hibátlan grafikonért
     
-    # 4. Romániai Inflációs ráta (%)
-    inflation_rate = [3.5 + (i * 0.6) if i < 18 else 14.5 - ((i-18) * 0.3) for i in range(n_months)]
-    inflation_rate = [max(2.0, inf + np.random.normal(0, 0.5)) for inf in inflation_rate]
+    # Infláció és Bér adatok (trendszimuláció a valós INSSE adatok mintájára)
+    n = len(data)
+    data['Inflacio_Szazalek'] = [3.0 + (i*0.2) + np.random.normal(0, 0.5) for i in range(n)]
+    data['Netto_Atlagber_RON'] = [3500 + (i * 50) + np.random.normal(0, 50) for i in range(n)]
+    data['Vasarloero_Index'] = [100 - (inf * 0.3) for inf in data['Inflacio_Szazalek']]
     
-    # 5. Nettó átlagkereset Romániában (RON) és Vásárlóerő index
-    base_salary = 3400
-    salary = [base_salary + (i * 45) + np.random.normal(0, 30) for i in range(n_months)]
-    purchasing_power = [100 + (i * 0.2) - (inf * 0.5) for i, inf in enumerate(inflation_rate)]
-
-    df = pd.DataFrame({
-        'Dátum': dates,
-        'Brent_Olaj_USD': brent_prices,
-        'USD_RON': usd_ron,
-        'EUR_RON': eur_ron,
-        'Benzin_RON': benzin_prices,
-        'Motorina_RON': motorina_prices,
-        'Inflacio_Szazalek': inflation_rate,
-        'Netto_Atlagber_RON': salary,
-        'Vasarloero_Index': purchasing_power
-    })
+    # Index reset és a 'Dátum' oszlop biztosítása
+    data = data.reset_index()
+    if 'Date' in data.columns:
+        data = data.rename(columns={'Date': 'Dátum'})
+    elif 'index' in data.columns:
+        data = data.rename(columns={'index': 'Dátum'})
+        
+    # Üzemanyagárak számítása a valós Brent és Deviza adatokból (korreláció)
+    data['Benzin_RON'] = (data['Brent_Olaj_USD'] * 0.05) + (data['USD_RON'] * 0.5) + np.random.normal(0, 0.1, n)
+    data['Motorina_RON'] = data['Benzin_RON'] + 0.3
     
-    return df
+    return data
